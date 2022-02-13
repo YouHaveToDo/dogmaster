@@ -2,19 +2,47 @@ import React from "react";
 import styled from "styled-components";
 import apis from "./apis";
 function App() {
+  // local 상태
+  const [state, setState] = React.useState(1);
+  const [num, setNum] = React.useState(0); // index 0 ~ 5 length = 6
+  const [totalList, setTotalList] = React.useState([]);
+  const [partList, setPartList] = React.useState();
   const [list, setList] = React.useState();
-  const [rest, setRest] = React.useState([]);
-  apis
-    .callData()
-    .then((response) => {
-      console.log(response);
-      setList(response.data.list);
-      console.log(list);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  // api call
+  async function dataCall() {
+    let res = await apis.callData(state);
+    let resList = res.data.list;
+    setTotalList([...totalList, ...resList]);
+    setState(state + 1);
+  }
 
+  function partListHandler() {
+    if (totalList.length >= num) {
+      setPartList(
+        totalList.filter((el, idx) => {
+          return idx < num;
+        })
+      );
+    } else {
+      dataCall();
+    }
+    setNum(num + 6);
+  }
+
+  // useEffect
+  React.useEffect(() => {
+    dataCall();
+  }, []);
+
+  React.useEffect(() => {
+    partListHandler();
+  }, [totalList]);
+
+  React.useEffect(() => {
+    setList(partList);
+  }, [partList]);
+
+  // return 시작
   return (
     <>
       <Liner>
@@ -22,10 +50,10 @@ function App() {
           {list
             ? list.map((el, idx) => {
                 return (
-                  <Item>
+                  <Item key={idx}>
                     <h3>{el.title}</h3>
                     <p>{el.contents}</p>
-                    <img src={el.image} alt="" />
+                    <img src={el.image} alt="" onClick={partListHandler} />
                   </Item>
                 );
               })

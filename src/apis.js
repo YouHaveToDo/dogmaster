@@ -9,6 +9,6 @@ const instance = axios.create({
 });
 
 export const apis = {
-  callData: (state) => instance.get(`1`),
+  callData: (state) => instance.get(`${state}`),
 };
 export default apis;
