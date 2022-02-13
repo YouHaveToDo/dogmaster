@@ -1,25 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
-
+import React from "react";
+import styled from "styled-components";
+import apis from "./apis";
 function App() {
+  const [list, setList] = React.useState();
+  const [rest, setRest] = React.useState([]);
+  apis
+    .callData()
+    .then((response) => {
+      console.log(response);
+      setList(response.data.list);
+      console.log(list);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Liner>
+        <Items>
+          {list
+            ? list.map((el, idx) => {
+                return (
+                  <Item>
+                    <h3>{el.title}</h3>
+                    <p>{el.contents}</p>
+                    <img src={el.image} alt="" />
+                  </Item>
+                );
+              })
+            : null}
+        </Items>
+      </Liner>
+    </>
   );
 }
 
 export default App;
+
+const Liner = styled.div`
+  width: 1200px;
+  margin: 0 auto;
+`;
+const Items = styled.div``;
+const Item = styled.div``;
