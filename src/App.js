@@ -11,7 +11,6 @@ function App() {
 
   // api call
   async function dataCall() {
-    console.log(state, "state");
     let res = await apis.callData(state).catch((err) => {
       window.alert("더이상 불러올 데이터가 없습니다.");
     });
@@ -27,10 +26,6 @@ function App() {
     );
   }
   async function partListHandler() {
-    console.log(totalList.length, num);
-    // if (totalList.length == 0) {
-    //   await dataCall();
-    // }
     if (totalList.length % 10 !== 0) {
       remakePartList();
     }
@@ -66,7 +61,15 @@ function App() {
                   <Item key={idx}>
                     <h3>{el.title}</h3>
                     <p>{el.contents}</p>
-                    <img src={el.image} alt="" />
+                    <img
+                      src={el.image}
+                      alt=""
+                      style={{
+                        width: "100%",
+                        height: "auto",
+                        maxWidth: "300px",
+                      }}
+                    />
                   </Item>
                 );
               })
@@ -87,5 +90,5 @@ const Liner = styled.div`
 const Items = styled.div``;
 const Item = styled.div``;
 const Button = styled.button`
-  margin: 50px 0 0 150px;
+  margin: 50px 0 0 480px;
 `;
